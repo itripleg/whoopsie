@@ -44,7 +44,11 @@ const AllWhoopsies: React.FC = () => {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen text-white/80">
+        Loading...
+      </div>
+    );
   }
 
   return (

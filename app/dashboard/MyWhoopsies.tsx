@@ -68,7 +68,7 @@ const MyWhoopsies: React.FC = () => {
             />
           ))
         ) : (
-          <p>No whoopsies found.</p>
+          <p className="text-white/20">No whoopsies found.</p>
         )}
       </div>
     </div>
