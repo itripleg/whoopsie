@@ -1,5 +1,7 @@
 //dashboard.tsx
 "use client";
+import { useRouter } from "next/navigation";
+
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { db } from "../../firebaseConfig.js";
@@ -7,49 +9,10 @@ import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import { LoginLink, useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import MyWhoopsies from "./MyWhoopsies";
 import LoginWidget from "@/components/LoginWidget";
-
-const whoopsieLevels = [
-  { name: "NBD", description: "No Big Deal - Minor slip-ups." },
-  { name: "Oops", description: "A small mistake, quickly forgotten." },
-  { name: "Uh-oh", description: "Requires a quick apology or explanation." },
-  {
-    name: "My Bad",
-    description:
-      "Acknowledgment required. This level indicates a need for a sincere apology and possibly a corrective action, but relationships remain intact.",
-  },
-  {
-    name: "Whoops",
-    description:
-      "The midpoint of the scale. It's a significant mistake that gets noticed, requires more than a simple apology, and might need efforts to make amends. However, it's not unforgivable.",
-  },
-  {
-    name: "Yikes",
-    description:
-      "A serious error or misjudgment that causes notable upset or harm, likely necessitating a more substantial effort to repair trust or reputation.",
-  },
-  {
-    name: "Oof",
-    description:
-      "A major blunder with repercussions affecting multiple people or aspects of life/work. This might involve public apologies, policy changes, or other reparative actions.",
-  },
-  {
-    name: "Uh-oh, Big Time",
-    description:
-      "A serious mistake that can have lasting consequences on personal or professional relationships. Recovery is possible but requires significant effort and time.",
-  },
-  {
-    name: "Major Whoopsie",
-    description:
-      "Near the top of the scale, indicating a mistake or action that causes widespread offense or harm, potentially leading to lasting damage to one's reputation or career.",
-  },
-  {
-    name: "Canceled",
-    description:
-      "A mistake or action so severe that it leads to a widespread call for accountability, often resulting in long-term or permanent professional, social, or public consequences.",
-  },
-];
+import { whoopsieLevels } from "@/util/whoopsieLevels";
 
 export default function Dashboard() {
+  const router = useRouter();
   const formatDateTimeLocal = (date: any) => {
     const formatted = new Date(
       date.getTime() - date.getTimezoneOffset() * 60000
@@ -58,6 +21,7 @@ export default function Dashboard() {
       .slice(0, 16);
     return formatted;
   };
+
   const { user } = useKindeBrowserClient();
   const [level, setLevel] = useState(1); // Default to "Whoops"
   const [timestamp, setTimestamp] = useState(formatDateTimeLocal(new Date())); // Set default timestamp to today's date
@@ -78,7 +42,7 @@ export default function Dashboard() {
         details,
         firstName: user.given_name,
         lastName: user.family_name,
-        email: user.email,
+        // email: user.email,
       });
       console.log("Whoopsie added successfully");
       // Reset form fields or handle success state
@@ -175,13 +139,23 @@ export default function Dashboard() {
             className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md text-black p-2 md:text-lg"
           ></textarea>
         </div>
-
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
-        >
-          Submit
-        </button>
+        <div className="flex justify-between">
+          <button
+            onClick={async () => {
+              router.push("/");
+              await fetch("/api/generate-whoopsie/");
+            }}
+            className="px-4 py-2 bg-pink-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
+          >
+            Generate Bot Whoopsie 🤖
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
+          >
+            Submit
+          </button>
+        </div>
         <MyWhoopsies />
       </form>
     </motion.div>

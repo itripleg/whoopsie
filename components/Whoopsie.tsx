@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 interface WhoopsieProps {
   id: string;
   level: string;
@@ -9,6 +10,7 @@ interface WhoopsieProps {
   firstName?: string;
   lastName?: string;
   photoUrl?: string; // Optional photo URL
+  deleteWhoopsie?: () => void;
 }
 
 const formatDateTimeLocal = (dateStr: string) => {
@@ -31,9 +33,11 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
   firstName,
   lastName,
   photoUrl,
+  deleteWhoopsie,
 }) => {
   const formattedDateTime = formatDateTimeLocal(timestamp);
   const [toggle, setToggle] = useState(false);
+  const pathname = usePathname();
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -50,25 +54,38 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
           className="rounded-md mb-3 max-h-60 w-full object-cover"
         />
       )}
-      <div className="text-sm mb-2">{formattedDateTime}</div>
+      <div className="flex justify-between">
+        <div className="text-sm mb-2">{formattedDateTime}</div>
+        {pathname == "/dashboard" && (
+          <div>
+            <button
+              onClick={deleteWhoopsie}
+              className="delete-btn text-red-600"
+            >
+              Delete
+            </button>
+          </div>
+        )}
+      </div>
       <p className="font-bold">Level: {level}</p>
       <p className="mb-2"> {details}</p>
-      {firstName && (
-        <p className="mb-3">Posted by: {`${firstName} ${lastName}`}</p>
-      )}
-      <div className="flex items-center space-x-4">
-        <span
-          className="cursor-pointer"
-          role="img"
-          aria-label="likes"
-          onClick={() => setToggle(!toggle)}
-        >
-          {toggle ? <p>❤️</p> : <p>🖤</p>}
-        </span>
-        <span role="img" aria-label="comments">
-          💬
-        </span>
-        {/* Add more icons as needed */}
+
+      <p className="mb-3">Posted by: {`${firstName} ${lastName}`}</p>
+
+      <div className="flex justify-end">
+        <div className="flex items-center space-x-4">
+          <span
+            className="cursor-pointer"
+            role="img"
+            aria-label="likes"
+            onClick={() => setToggle(!toggle)}
+          >
+            {toggle ? <p>❤️</p> : <p>🖤</p>}
+          </span>
+          <span role="img" aria-label="comments">
+            💬
+          </span>
+        </div>
       </div>
     </motion.div>
   );

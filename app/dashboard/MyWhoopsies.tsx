@@ -3,7 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { db } from "@/firebaseConfig"; // Ensure this path is correct
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import { query, collection, where, onSnapshot } from "firebase/firestore";
+import {
+  query,
+  collection,
+  where,
+  onSnapshot,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import Whoopsie from "@/components/Whoopsie"; // Adjust the import path as necessary
 
 interface WhoopsieProps {
@@ -18,6 +25,15 @@ interface WhoopsieProps {
 const MyWhoopsies: React.FC = () => {
   const { user } = useKindeBrowserClient();
   const [whoopsies, setWhoopsies] = useState<WhoopsieProps[]>([]);
+
+  const deleteWhoopsie = async (whoopsieId: string) => {
+    try {
+      await deleteDoc(doc(db, "whoopsies", whoopsieId));
+      console.log("Whoopsie deleted successfully");
+    } catch (error) {
+      console.error("Error deleting whoopsie: ", error);
+    }
+  };
 
   useEffect(() => {
     if (user?.id) {
@@ -65,6 +81,7 @@ const MyWhoopsies: React.FC = () => {
               // likedBy={[]}
               // firstName={whoopsie.firstName}
               // lastName={whoopsie.lastName}
+              deleteWhoopsie={() => deleteWhoopsie(whoopsie.id)}
             />
           ))
         ) : (

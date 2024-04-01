@@ -6,10 +6,5 @@ import Image from "next/image";
 
 export default function Home() {
   const { user } = useKindeBrowserClient();
-  return (
-    <>
-      {!user ? <LandingPage /> : <AllWhoopsies />}
-      {/* <AllWhoopsies /> */}
-    </>
-  );
+  return <>{!user ? <LandingPage /> : <AllWhoopsies />}</>;
 }
