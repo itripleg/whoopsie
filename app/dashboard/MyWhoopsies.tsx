@@ -61,8 +61,9 @@ const MyWhoopsies: React.FC = () => {
               level={whoopsie.level}
               timestamp={whoopsie.timestamp}
               details={whoopsie.details}
-              likes={0}
-              likedBy={[]} // firstName={whoopsie.firstName}
+              // likes={0}
+              // likedBy={[]}
+              // firstName={whoopsie.firstName}
               // lastName={whoopsie.lastName}
             />
           ))
