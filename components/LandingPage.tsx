@@ -18,10 +18,8 @@ export default function Home() {
         transition={{ duration: 0.5 }}
         className="text-center p-4"
       >
-        <h1 className="text-5xl font-bold text-gray-900 mb-4">Whoopsie</h1>
-        <p className="text-lg text-gray-700 mb-8">
-          Navigate social faux pas with ease.
-        </p>
+        <h1 className="text-5xl font-bold  mb-4 text-white">Whoopsie</h1>
+        <p className="text-lg text-gray-700 mb-8">Whoops, you did it again.</p>
         <LoginLink>
           {" "}
           <motion.button
