@@ -32,12 +32,12 @@ export async function GET() {
 
   try {
     await addDoc(collection(db, "whoopsies"), {
-      userId: "whooptimus_prime_bot", // A placeholder user ID for the bot
+      userId: "perfect_bot", // A placeholder user ID for the bot
       level: whoopsieLevel, // Assuming this directly corresponds to a numerical level you can use
       timestamp: new Date().toISOString(),
       details: whoopsieText,
-      firstName: "Whooptimus",
-      lastName: "Prime",
+      firstName: "Perfect",
+      lastName: "Machine",
       email: "whooptimus@yourdomain.com", // A placeholder email for the bot
     });
     console.log("Whoopsie added successfully by Whooptimus Prime.");

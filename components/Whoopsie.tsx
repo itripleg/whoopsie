@@ -139,9 +139,12 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
               <Card className="bg-white w-full">
                 <CardHeader>
                   <CardTitle>
+                    <h1 className="text-lg">{level}</h1>
                     {firstName} {lastName}
                   </CardTitle>
-                  <CardDescription>{formattedDateTime}</CardDescription>
+                  <CardDescription className="text-xs">
+                    {formattedDateTime}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   {/* <p>See Details</p> */}
@@ -154,8 +157,8 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
             </AccordionTrigger>
             <AccordionContent>
               <div className="flex pb-2">
-                <p>😂😅🤭🤬 13 Likes</p>
-                <div className="text-sm mb-2">{formattedDateTime}</div>
+                <p>😂😅🤭🙄 13 Likes</p>
+                {/* <div className="text-sm mb-2">{formattedDateTime}</div> */}
                 {pathname == "/dashboard" && (
                   <div>
                     <button
