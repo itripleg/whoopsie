@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
-import EmojiPicker from "emoji-picker-react";
 
 import {
   Accordion,
@@ -27,6 +25,9 @@ import {
   onSnapshot,
   addDoc,
   serverTimestamp,
+  deleteDoc,
+  doc,
+  setDoc,
 } from "firebase/firestore";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
@@ -79,6 +80,37 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
   const [comments, setComments] = useState<Comment[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [newComment, setNewComment] = useState("");
+  const [likes, setLikes] = useState(0);
+  const [hasLiked, setHasLiked] = useState(false);
+
+  useEffect(() => {
+    // Fetch likes count
+    const likesRef = collection(db, `whoopsies/${id}/likes`);
+    const unsubscribeLikes = onSnapshot(likesRef, (snapshot) => {
+      setLikes(snapshot.size);
+      const userId = user?.id; // Assuming `user` object has a `uid` property
+      const hasLiked = snapshot.docs.some((doc) => doc.id === userId);
+      setHasLiked(hasLiked);
+    });
+
+    return () => {
+      unsubscribeLikes();
+    };
+  }, [id, user?.id]);
+
+  const handleLike = async () => {
+    const userId = user?.id;
+    if (!userId) return;
+
+    const likeRef = doc(db, `whoopsies/${id}/likes`, userId);
+    if (hasLiked) {
+      // Unlike
+      await deleteDoc(likeRef);
+    } else {
+      // Like
+      await setDoc(likeRef, { timestamp: serverTimestamp() });
+    }
+  };
 
   useEffect(() => {
     const commentsRef = query(
@@ -157,7 +189,10 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
             </AccordionTrigger>
             <AccordionContent>
               <div className="flex pb-2">
-                <p>😂😅🤭🙄 13 Likes</p>
+                {/* <p>😂😅🤭🙄 13 Likes</p> */}
+                <button onClick={handleLike}>
+                  {hasLiked ? "❤️" : "🤍"} {likes} Likes
+                </button>
                 {/* <div className="text-sm mb-2">{formattedDateTime}</div> */}
                 {pathname == "/dashboard" && (
                   <div>
