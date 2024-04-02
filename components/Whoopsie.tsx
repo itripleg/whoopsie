@@ -28,6 +28,7 @@ import {
   deleteDoc,
   doc,
   setDoc,
+  getDocs,
 } from "firebase/firestore";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
@@ -37,6 +38,13 @@ type Comment = {
   comment: string;
   firstName: string;
   lastName: string;
+  likesCount: number;
+  hasLiked: boolean;
+};
+
+type CommentWithLikes = Comment & {
+  likesCount: number;
+  hasLiked: boolean;
 };
 
 interface WhoopsieProps {
@@ -117,29 +125,70 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
       collection(db, `whoopsies/${id}/comments`),
       orderBy("timestamp", "desc")
     );
-    console.log("use effect");
-    const unsubscribe = onSnapshot(
-      commentsRef,
-      (querySnapshot) => {
-        const commentsData: Comment[] = querySnapshot.docs.map((doc) => {
-          console.log(doc.data);
+    const unsubscribe = onSnapshot(commentsRef, async (querySnapshot) => {
+      const commentsData: Promise<CommentWithLikes>[] = querySnapshot.docs.map(
+        async (doc) => {
+          const commentId = doc.id;
+          // Fetch likes for the comment
+          const likesSnapshot = await getDocs(
+            collection(db, `whoopsies/${id}/comments/${commentId}/likes`)
+          );
+          const userId = user?.id;
+          const hasLiked = likesSnapshot.docs.some(
+            (likeDoc: any) => likeDoc.id === userId
+          );
           return {
             id: doc.id,
+            hasLiked,
+            likesCount: likesSnapshot.size,
             ...doc.data(),
-          } as Comment;
-        });
+          } as CommentWithLikes;
+        }
+      );
 
-        setComments(commentsData);
-        setIsLoading(false);
-      },
-      (error) => {
-        console.error("Error fetching comments:", error);
-      }
-    );
+      const resolvedCommentsData = await Promise.all(commentsData);
+      setComments(resolvedCommentsData);
+      setIsLoading(false);
+    });
 
     return () => unsubscribe();
-  }, [id]);
-  // Handle new comment submission
+  }, [id, user?.id]);
+
+  const handleCommentLike = async (commentId: string, hasLiked: boolean) => {
+    const userId = user?.id;
+    if (!userId) return;
+
+    // Optimistically update the UI
+    setComments((prevComments) =>
+      prevComments.map((comment) => {
+        if (comment.id === commentId) {
+          return {
+            ...comment,
+            likesCount: hasLiked
+              ? comment.likesCount - 1
+              : comment.likesCount + 1,
+            hasLiked: !hasLiked,
+          };
+        }
+        return comment;
+      })
+    );
+
+    // Then update the database
+    const likeRef = doc(
+      db,
+      `whoopsies/${id}/comments/${commentId}/likes`,
+      userId
+    );
+    if (hasLiked) {
+      // If previously liked, unlike it
+      await deleteDoc(likeRef);
+    } else {
+      // If not liked before, like it
+      await setDoc(likeRef, { timestamp: serverTimestamp() });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!newComment.trim()) return;
@@ -215,14 +264,24 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
                     transition={{ duration: 0.5 }} // Control the speed of the animation
                     className="py-2 border p-1 rounded-md my-1"
                   >
-                    <div className="">
+                    <div className="flex justify-between">
                       {/* <p>{formatDate(comment.timestamp)}</p> */}
-                      <h1 className="text-xs">
-                        {comment.firstName} {comment.lastName}
-                      </h1>
+                      <div className="mx-2">
+                        <h1 className="text-xs">
+                          {comment.firstName} {comment.lastName}
+                        </h1>
+                        <p>{comment.comment}</p>
+                      </div>
+                      <button
+                        onClick={() =>
+                          handleCommentLike(comment.id, comment.hasLiked)
+                        }
+                        className="mr-1"
+                      >
+                        {comment.hasLiked ? "❤️" : "🤍"} {comment.likesCount}{" "}
+                        Likes
+                      </button>
                     </div>
-                    <p>{comment.comment}</p>{" "}
-                    {/* Make sure to use the correct property name */}
                   </motion.div>
                 ))}
               </div>
@@ -232,7 +291,7 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
                   <input
                     type="text"
                     placeholder="Comment..."
-                    className="p-1 rounded-md text-black w-full max-w-lg lg:max-w-3xl mx-1"
+                    className="p-1 rounded-md text-black w-full  lg:max-w-3xl mx-1"
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
                   />
