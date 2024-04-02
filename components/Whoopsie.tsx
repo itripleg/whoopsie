@@ -31,6 +31,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { WhoopsieIndicator } from "./WhoopsieIndicator";
 
 type Comment = {
   id: string;
@@ -214,6 +215,9 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
         transition={{ duration: 0.5 }}
         className="bg-gray-700 text-white p-4 rounded-lg mb-4 shadow-lg flex-col space-y-4 max-w-4xl w-full"
       >
+        <div className="flex w-full justify-center -my-6">
+          <WhoopsieIndicator whoopsieName={level} />
+        </div>
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-2">
             <AccordionTrigger>
