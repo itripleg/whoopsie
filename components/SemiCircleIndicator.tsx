@@ -20,7 +20,7 @@ const SemiCircleIndicator: React.FC<SemiCircleIndicatorProps> = ({ value }) => {
   const color = calculateColor(progress);
 
   return (
-    <svg width="100" height="50" viewBox="0 0 200 100">
+    <svg width="75" height="50" viewBox="0 0 200 100">
       <path
         d="M10,100 a90,90 0 0,1 180,0"
         fill="none"
@@ -41,7 +41,7 @@ const SemiCircleIndicator: React.FC<SemiCircleIndicatorProps> = ({ value }) => {
           strokeDashoffset: strokeDashoffset,
           stroke: color, // Target color based on value
         }}
-        transition={{ duration: 2, ease: "easeInOut" }}
+        transition={{ duration: 1, ease: "easeInOut" }}
       />
       {/* Add text element for value display */}
       <text
@@ -49,7 +49,7 @@ const SemiCircleIndicator: React.FC<SemiCircleIndicatorProps> = ({ value }) => {
         y="85" // Slightly above the bottom of the SVG height
         textAnchor="middle" // Centers the text on the x coordinate
         fill={color} // Text color
-        fontSize="50" // Adjust as needed
+        fontSize="60" // Adjust as needed
         fontFamily="Arial, sans-serif" // Adjust as needed
       >
         {value}

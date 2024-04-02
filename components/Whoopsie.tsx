@@ -91,6 +91,7 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
   const [newComment, setNewComment] = useState("");
   const [likes, setLikes] = useState(0);
   const [hasLiked, setHasLiked] = useState(false);
+  const [showIndicator, setShowIndicator] = useState(false);
 
   useEffect(() => {
     // Fetch likes count
@@ -215,12 +216,21 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
         transition={{ duration: 0.5 }}
         className="bg-gray-700 text-white p-4 rounded-lg mb-4 shadow-lg flex-col space-y-4 max-w-4xl w-full"
       >
-        <div className="flex w-full justify-center -my-6">
-          <WhoopsieIndicator whoopsieName={level} />
+        <div className="flex w-full justify-center -my-3">
+          {/* Step 3: Conditionally render the WhoopsieIndicator based on its visibility state */}
+          {showIndicator && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }} // This makes it fade out when removed
+            >
+              <WhoopsieIndicator whoopsieName={level} />
+            </motion.div>
+          )}
         </div>
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-2">
-            <AccordionTrigger>
+            <AccordionTrigger onClick={() => setShowIndicator(!showIndicator)}>
               <Card className="bg-white w-full">
                 <CardHeader>
                   <CardTitle>
@@ -290,7 +300,6 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
                 ))}
               </div>
               <div>
-                {" "}
                 <form onSubmit={handleSubmit} className="flex justify-between">
                   <input
                     type="text"
