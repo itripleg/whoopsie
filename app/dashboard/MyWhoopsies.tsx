@@ -20,6 +20,7 @@ interface WhoopsieProps {
   details: string;
   firstName: string;
   lastName: string;
+  image?: string;
 }
 
 const MyWhoopsies: React.FC = () => {
@@ -81,6 +82,7 @@ const MyWhoopsies: React.FC = () => {
               // likedBy={[]}
               // firstName={whoopsie.firstName}
               // lastName={whoopsie.lastName}
+              imageURL={whoopsie.image}
               deleteWhoopsie={() => deleteWhoopsie(whoopsie.id)}
             />
           ))

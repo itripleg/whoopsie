@@ -1,4 +1,5 @@
-import { whoopsieLevels } from "@/util/whoopsieLevels";
+//WhoopsieIndicator.tsx
+import { whoopsieLevels } from "@/lib/whoopsieLevels";
 import SemiCircleIndicator from "../components/SemiCircleIndicator";
 
 const getWhoopsieLevelValue = (levelName: string) => {

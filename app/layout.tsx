@@ -25,7 +25,9 @@ export default function RootLayout({
         ></script>
       </head>
       <body className={inter.className}>
-        <NavigationHeader />
+        <div className="flex w-full">
+          <NavigationHeader />
+        </div>
         <div className="bg-blue-500 min-h-screen">{children}</div>
       </body>
     </html>

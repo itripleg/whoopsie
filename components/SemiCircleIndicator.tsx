@@ -44,16 +44,19 @@ const SemiCircleIndicator: React.FC<SemiCircleIndicatorProps> = ({ value }) => {
         transition={{ duration: 1, ease: "easeInOut" }}
       />
       {/* Add text element for value display */}
-      <text
+      <motion.text
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, y: 15 }}
+        transition={{ delay: 0.8 }}
         x="100" // Center of the SVG width
-        y="85" // Slightly above the bottom of the SVG height
+        y="90" // Slightly above the bottom of the SVG height
         textAnchor="middle" // Centers the text on the x coordinate
         fill={color} // Text color
         fontSize="60" // Adjust as needed
         fontFamily="Arial, sans-serif" // Adjust as needed
       >
-        {value}
-      </text>
+        {value == 10 ? "💀" : value}
+      </motion.text>
     </svg>
   );
 };

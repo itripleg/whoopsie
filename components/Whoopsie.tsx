@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import {
@@ -55,7 +56,7 @@ interface WhoopsieProps {
   details: string;
   firstName?: string;
   lastName?: string;
-  photoUrl?: string;
+  imageURL?: string;
   deleteWhoopsie?: () => void;
   comments?: Comment[];
 }
@@ -79,7 +80,7 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
   details,
   firstName,
   lastName,
-  photoUrl,
+  imageURL,
   deleteWhoopsie,
 }) => {
   const { user } = useKindeBrowserClient();
@@ -216,13 +217,12 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
         transition={{ duration: 0.5 }}
         className="bg-gray-700 text-white p-4 rounded-lg mb-4 shadow-lg flex-col space-y-4 max-w-4xl w-full"
       >
-        <div className="flex w-full justify-center -my-3">
-          {/* Step 3: Conditionally render the WhoopsieIndicator based on its visibility state */}
+        <div className="flex w-full justify-center">
           {showIndicator && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }} // This makes it fade out when removed
+              exit={{ opacity: 0 }}
             >
               <WhoopsieIndicator whoopsieName={level} />
             </motion.div>
@@ -231,7 +231,12 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-2">
             <AccordionTrigger onClick={() => setShowIndicator(!showIndicator)}>
-              <Card className="bg-white w-full">
+              <Card
+                className="bg-white w-full"
+                onClick={() => {
+                  setToggle(!toggle);
+                }}
+              >
                 <CardHeader>
                   <CardTitle>
                     <h1 className="text-lg">{level}</h1>
@@ -244,18 +249,40 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
                 <CardContent>
                   {/* <p>See Details</p> */}
                   <p>{details}</p>
+                  <motion.div
+                    animate={{ opacity: 1 }}
+                    initial={{ opacity: 0 }}
+                    transition={{ delay: 1 }}
+                    // className={`${!toggle && "hidden"}`}
+                  >
+                    {imageURL && (
+                      <Image
+                        width={5000}
+                        height={5000}
+                        src={imageURL || "/background.webp"}
+                        // src="/background.webp"
+                        alt=""
+                        className={`w-full rounded-md mt-4 z-40`}
+                        onClick={() => {
+                          if (toggle) {
+                            // alert();
+                          }
+                        }}
+                      />
+                    )}
+                  </motion.div>
                 </CardContent>
                 {/* <CardFooter>
-                <p>Card Footer</p>
-              </CardFooter> */}
+                  <p>Card Footer</p>
+                </CardFooter> */}
               </Card>
             </AccordionTrigger>
+            <button onClick={handleLike}>
+              {hasLiked ? "❤️" : "🤍"} {likes} Likes
+            </button>
             <AccordionContent>
-              <div className="flex pb-2">
+              <div className="flex pb-2 ">
                 {/* <p>😂😅🤭🙄 13 Likes</p> */}
-                <button onClick={handleLike}>
-                  {hasLiked ? "❤️" : "🤍"} {likes} Likes
-                </button>
                 {/* <div className="text-sm mb-2">{formattedDateTime}</div> */}
                 {pathname == "/dashboard" && (
                   <div>

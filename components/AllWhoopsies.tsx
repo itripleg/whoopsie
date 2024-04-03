@@ -11,30 +11,7 @@ type Whoopsie = {
   details: string;
   firstName?: string;
   lastName?: string;
-};
-
-type Comment = {
-  id: string;
-  timestamp: string;
-  details: string;
-  firstName: string;
-  lastName: string;
-};
-
-const comment1: Comment = {
-  id: "test",
-  timestamp: "2021-08-01T14:00:00.000Z",
-  details: "This is a test comment",
-  firstName: "Test",
-  lastName: "Test",
-};
-
-const comment2: Comment = {
-  id: "test2",
-  timestamp: "2021-08-01T14:00:00.000Z",
-  details: "This is a test comment 2",
-  firstName: "Test2",
-  lastName: "Test2",
+  image?: string;
 };
 
 const AllWhoopsies: React.FC = () => {
@@ -77,7 +54,6 @@ const AllWhoopsies: React.FC = () => {
     );
   }
 
-  const data = [comment1, comment2, comment1, comment2, comment1, comment2];
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold text-white mb-4 text-center">
@@ -93,6 +69,7 @@ const AllWhoopsies: React.FC = () => {
             details={whoopsie.details}
             firstName={whoopsie.firstName}
             lastName={whoopsie.lastName}
+            imageURL={whoopsie.image}
             // comments={comments}
             // likes={0}
             // likedBy={[]}

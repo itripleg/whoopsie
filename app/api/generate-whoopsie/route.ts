@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { OpenAI } from "openai";
 import { db } from "../../../firebaseConfig"; // Ensure this is correctly pointing to your Firebase config
 import { collection, addDoc } from "firebase/firestore";
-import { whoopsieLevels } from "@/util/whoopsieLevels";
+import { whoopsieLevels } from "@/lib/whoopsieLevels";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 function mapLevelToName(level: any) {
