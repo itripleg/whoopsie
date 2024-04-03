@@ -55,7 +55,7 @@ const SemiCircleIndicator: React.FC<SemiCircleIndicatorProps> = ({ value }) => {
         fontSize="60" // Adjust as needed
         fontFamily="Arial, sans-serif" // Adjust as needed
       >
-        {value == 10 ? "💀" : value}
+        {value == 10 ? "💀" : value == 1 ? "😎" : value}
       </motion.text>
     </svg>
   );
