@@ -11,7 +11,7 @@ const variants = {
     opacity: [1, 0.7, 1], // Added opacity animation
     scale: [1, 1.2, 1], // Added scale animation
     transition: {
-      delay: 3,
+      delay: 2,
       // delay: getRandomDelay(),
       repeat: Infinity,
       duration: randomDuration(),
