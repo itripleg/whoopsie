@@ -9,11 +9,9 @@ import React from "react";
 const NavigationHeader: React.FC = () => {
   const { user } = useKindeBrowserClient();
   return (
-    <header className="bg-gray-800 text-white body-font shadow w-full">
-      <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-        <Link href="/">
-          <span className="ml-3 text-xl">😅</span>
-        </Link>
+    <header className="bg-gray-800 text-white body-font w-full absolute">
+      <div className="flex p-5 md:flex-row items-center justify-between">
+        <span className=" text-xl">😅</span>
         <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center gap-x-4">
           <Link href="/">Home</Link>
           <Link href="/dashboard">Dashboard</Link>

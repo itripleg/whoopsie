@@ -126,7 +126,7 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
   useEffect(() => {
     const commentsRef = query(
       collection(db, `whoopsies/${id}/comments`),
-      orderBy("timestamp", "desc")
+      orderBy("timestamp", "asc")
     );
     const unsubscribe = onSnapshot(commentsRef, async (querySnapshot) => {
       const commentsData: Promise<CommentWithLikes>[] = querySnapshot.docs.map(

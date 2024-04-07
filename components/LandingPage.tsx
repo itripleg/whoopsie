@@ -5,7 +5,7 @@ import {
   useKindeBrowserClient,
 } from "@kinde-oss/kinde-auth-nextjs";
 import { motion } from "framer-motion";
-import AllWhoopsies from "./AllWhoopsies";
+import ShakeWord from "./ShakeWord";
 
 export default function Home() {
   const { user } = useKindeBrowserClient();
@@ -18,12 +18,16 @@ export default function Home() {
         transition={{ duration: 0.5 }}
         className="text-center p-4"
       >
-        <h1 className="text-5xl font-bold  mb-4 text-white/80">Whoopsie</h1>
+        <ShakeWord
+          word={"whoopsie"}
+          style="text-white/80 text-5xl text-bold mb-4"
+        />
         <p className="text-lg text-gray-700 mb-8">Whoops, you did it again.</p>
         <motion.div
           initial={{ opacity: 0 }}
           transition={{ delay: 1 }}
           animate={{ opacity: 1 }}
+          className="flex gap-x-4 justify-center"
         >
           <LoginLink>
             <motion.button
