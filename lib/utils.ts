@@ -67,7 +67,10 @@ export async function addWhoopsie({
       // email: user.email,
     });
     if (imageFile) {
-      const storageRef = ref(storage, `whoopsie_images/${imageFile}`);
+      const storageRef = ref(
+        storage,
+        `whoopsie_images/${user.id + "-" + timestamp}`
+      );
       await uploadBytes(storageRef, imageFile);
       const url = await getDownloadURL(storageRef);
       //update doc with the download url

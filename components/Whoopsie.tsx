@@ -192,7 +192,7 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!newComment.trim()) return;
 
@@ -287,7 +287,12 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
                 {pathname == "/dashboard" && (
                   <div>
                     <button
-                      onClick={deleteWhoopsie}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (deleteWhoopsie) {
+                          deleteWhoopsie();
+                        }
+                      }}
                       className="delete-btn text-red-600 absolute top-0 right-2 p-1"
                     >
                       Delete
@@ -327,13 +332,21 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
                 ))}
               </div>
               <div>
-                <form onSubmit={handleSubmit} className="flex justify-between">
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSubmit(e);
+                  }}
+                  className="flex justify-between"
+                >
                   <input
                     type="text"
                     placeholder="Comment..."
                     className="p-1 rounded-md text-black w-full  lg:max-w-3xl mx-1"
                     value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
+                    onChange={(e) => {
+                      setNewComment(e.target.value);
+                    }}
                   />
                   <button type="submit" className="border p-2 px-4 rounded-md">
                     Submit
