@@ -277,9 +277,16 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
                 </CardFooter> */}
               </Card>
             </AccordionTrigger>
-            <button onClick={handleLike}>
-              {hasLiked ? "❤️" : "🤍"} {likes} Likes
-            </button>
+            <div className="flex justify-between pb-2">
+              <button onClick={handleLike}>
+                {hasLiked ? "❤️" : "🤍"} {likes} Likes
+              </button>
+              {comments.length > 0 && (
+                <p className="mr-2">
+                  {comments.length} Comment{comments.length > 1 ? "s" : ""}
+                </p>
+              )}
+            </div>
             <AccordionContent>
               <div className="flex pb-2 ">
                 {/* <p>😂😅🤭🙄 13 Likes</p> */}
@@ -301,7 +308,7 @@ const Whoopsie: React.FC<WhoopsieProps> = ({
                 )}
               </div>
 
-              <div className="max-h-[200px] flex-col overflow-y-auto p-1">
+              <div className="max-h-[200px] flex-col overflow-y-auto p-1 scrollbar">
                 {comments?.map((comment) => (
                   <motion.div
                     key={comment.id}
